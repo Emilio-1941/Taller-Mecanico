@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Registro de clientes del taller",
+    "output": ".archify/architecture-registro-cliente-20260928-182000/registro-cliente.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    { "id": "operador", "type": "external", "label": "Administrador / Recepcionista", "sublabel": "Sesion con rol autorizado", "pos": [40, 60], "size": [220, 84] },
+    { "id": "vue", "type": "frontend", "label": "Vue: RegistroCliente / ListaClientes", "sublabel": "Formulario, foto y listado", "pos": [40, 260], "size": [300, 96] },
+    { "id": "jwt", "type": "security", "label": "Validacion JWT", "sublabel": "Firma, vigencia y rol", "pos": [500, 500], "size": [220, 84] },
+    { "id": "controller", "type": "backend", "label": "ClienteController", "sublabel": "POST /api/clientes · GET /api/clientes", "pos": [40, 500], "size": [300, 84] },
+    { "id": "service", "type": "backend", "label": "ClienteService", "sublabel": "Valida datos, foto y duplicados", "pos": [40, 740], "size": [260, 84] },
+    { "id": "repository", "type": "backend", "label": "ClienteRepository (JPA)", "sublabel": "Consulta y persistencia", "pos": [40, 1070], "size": [260, 84] },
+    { "id": "mysql", "type": "database", "label": "MySQL · mecanico", "sublabel": "clientes · taller_id FK", "pos": [40, 1320], "size": [220, 84] }
+  ],
+  "connections": [
+    { "id": "operator-form", "from": "operador", "to": "vue", "label": "captura / consulta", "variant": "emphasis" },
+    { "id": "vue-api", "from": "vue", "to": "controller", "label": "multipart POST · JSON GET" },
+    { "id": "jwt-gate", "from": "jwt", "to": "controller", "label": "JWT + rol autorizado", "variant": "security", "fromSide": "left", "toSide": "right" },
+    { "id": "controller-service", "from": "controller", "to": "service", "label": "delegacion" },
+    { "id": "service-repository", "from": "service", "to": "repository", "label": "validar duplicados · guardar / listar" },
+    { "id": "repository-mysql", "from": "repository", "to": "mysql", "label": "JPA" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "Validacion", "items": ["Email, telefono y fecha", "Foto JPG / PNG / WEBP hasta 7 MB", "Duplicados rechazados con HTTP 409"] },
+    { "dot": "slate", "title": "Resultado", "items": ["Alta confirmada en pantalla", "Listado de clientes registrados", "Relacion del cliente con taller_id"] }
+  ]
+}

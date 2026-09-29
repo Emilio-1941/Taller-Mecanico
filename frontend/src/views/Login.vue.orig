@@ -41,7 +41,7 @@ async function iniciarSesion() {
       <h1 class="mb-8 mt-1 text-2xl font-semibold text-zinc-900">Iniciar sesion</h1>
       <form class="space-y-5" @submit.prevent="iniciarSesion">
         <label class="block">
-          <span class="mb-2 block text-sm font-medium text-zinc-700">Usuario o correo</span>
+          <span class="mb-2 block text-sm font-medium text-zinc-700">Usuario</span>
           <input v-model.trim="usuario" required autocomplete="username" class="w-full border border-zinc-300 px-3 py-2.5 outline-none focus:border-zinc-900">
         </label>
         <label class="block">

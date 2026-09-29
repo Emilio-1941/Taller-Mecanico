@@ -18,11 +18,12 @@ import java.util.Set;
 @RequestMapping("/api")
 @CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
 public class LoginController {
-    private static final Set<String> ROLES = Set.of("ADMINISTRADOR", "GERENTE", "CLIENTE");
+    private static final Set<String> ROLES = Set.of("ADMINISTRADOR", "GERENTE", "CLIENTE", "RECEPCIONISTA");
     private final JdbcTemplate jdbc;
+    private final com.taller.auth.clientes.security.JwtService jwtService;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public LoginController(JdbcTemplate jdbc) { this.jdbc = jdbc; }
+    public LoginController(JdbcTemplate jdbc, com.taller.auth.clientes.security.JwtService jwtService) { this.jdbc = jdbc; this.jwtService = jwtService; }
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest request) {
@@ -40,7 +41,7 @@ public class LoginController {
                 return rejected();
             }
             return ResponseEntity.ok(Map.of("ok", true, "mensaje", "Inicio de sesion exitoso.",
-                    "id", user.id(), "usuario", user.nombre(), "rol", user.rol()));
+                    "id", user.id(), "usuario", user.nombre(), "rol", user.rol(), "token", jwtService.issue(user.id(), user.nombre(), user.rol())));
         } catch (DataAccessException e) {
             return ResponseEntity.internalServerError().body(Map.of("ok", false, "mensaje", "No se pudo consultar la base de datos."));
         }

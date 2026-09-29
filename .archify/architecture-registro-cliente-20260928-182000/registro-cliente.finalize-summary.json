@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "finalize",
+  "status": "skipped",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "/home/arlet/Documentos/ChatGPT/TALLER/.archify/architecture-registro-cliente-20260928-182000/candidate.json",
+    "sha256": "d79d0ee130cbd20975ce48527401cee981f030c72b67bc6601ce3063909665c9",
+    "bytes": 2433
+  },
+  "artifact": {
+    "path": "/home/arlet/Documentos/ChatGPT/TALLER/.archify/architecture-registro-cliente-20260928-182000/registro-cliente.html",
+    "sha256": "c7717faa972d771f1069ec3dca3f1a1170e743628263abb2466e5fdbe7957822",
+    "bytes": 756562
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "skipped"
+  },
+  "failedStage": "browser-check",
+  "diagnostics": [
+    {
+      "code": "viewer/chrome-unavailable",
+      "severity": "warning",
+      "message": "Chrome or Chromium is unavailable. Set ARCHIFY_CHROME to its executable path.",
+      "subject": {
+        "artifact": "/home/arlet/Documentos/ChatGPT/TALLER/.archify/architecture-registro-cliente-20260928-182000/registro-cliente.html"
+      },
+      "evidence": {
+        "executable": null
+      },
+      "supportedFixes": [
+        "set ARCHIFY_CHROME to a Chrome or Chromium executable and rerun browser-check"
+      ]
+    }
+  ],
+  "diagnosticSummary": {
+    "total": 1,
+    "shown": 1,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "/home/arlet/Documentos/ChatGPT/TALLER/.archify/architecture-registro-cliente-20260928-182000/registro-cliente.finalize.json",
+    "summaryReceipt": "/home/arlet/Documentos/ChatGPT/TALLER/.archify/architecture-registro-cliente-20260928-182000/registro-cliente.finalize-summary.json",
+    "browserCheckReceipt": "/home/arlet/Documentos/ChatGPT/TALLER/.archify/architecture-registro-cliente-20260928-182000/registro-cliente.browser-check.json"
+  },
+  "update": {
+    "status": "unavailable",
+    "installedVersion": null,
+    "availableVersion": null,
+    "releaseNotes": null,
+    "checkedAt": null,
+    "source": null,
+    "noticeRequired": false,
+    "noticeText": null,
+    "reason": "timeout"
+  },
+  "visualReview": "not-requested",
+  "durationMs": 1952
+}

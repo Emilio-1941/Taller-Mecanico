@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "5683dbba-a66f-43f6-89a1-3ea20ad25e9e",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "/home/arlet/Documentos/ChatGPT/TALLER/.archify/architecture-registro-cliente-20260928-182000/candidate.json",
+  "output": "/home/arlet/Documentos/ChatGPT/TALLER/.archify/architecture-registro-cliente-20260928-182000/registro-cliente.html",
+  "specification": {
+    "sha256": "d79d0ee130cbd20975ce48527401cee981f030c72b67bc6601ce3063909665c9",
+    "bytes": 2433
+  },
+  "artifact": {
+    "sha256": "c7717faa972d771f1069ec3dca3f1a1170e743628263abb2466e5fdbe7957822",
+    "bytes": 756562
+  }
+}

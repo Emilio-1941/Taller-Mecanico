@@ -1,0 +1,7 @@
+package com.taller.auth.clientes.security;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.*;
+@Configuration public class ClienteWebConfig implements WebMvcConfigurer {
+ private final ClienteRoleInterceptor interceptor; public ClienteWebConfig(ClienteRoleInterceptor i){this.interceptor=i;}
+ public void addInterceptors(InterceptorRegistry r){r.addInterceptor(interceptor).addPathPatterns("/api/clientes","/api/clientes/**");}
+}
