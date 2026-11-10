@@ -130,14 +130,14 @@ const mostrarModalVehiculo=ref(false),clienteSeleccionado=ref(null),guardandoVeh
 const vehiculoVacio=()=>({clienteId:null,vin:'',placa:'',marca:'',modelo:'',anio:new Date().getFullYear(),version:'',color:'',kilometraje:0,numeroSerie:''})
 const vehiculoForm=ref(vehiculoVacio())
 const sesion=()=>JSON.parse(localStorage.getItem('sesion')||'{}'),headers=()=>({Authorization:`Bearer ${sesion().token||''}`})
-async function cargar(){cargando.value=true;mensaje.value='';try{const q=new URLSearchParams({pagina:String(pagina.value),orden:ordenAsc.value?'asc':'desc',ordenar_por:ordenarPor.value,incluir_suspendidos:String(incluirSuspendidos.value)});const r=await fetch(`http://localhost:8080/api/clientes?${q}`,{headers:headers()}),data=await r.json();if(!r.ok)throw Error(data.mensaje||'No se pudo cargar la lista.');clientes.value=data.content;paginas.value=data.totalPages;Object.values(fotoUrls.value).forEach(URL.revokeObjectURL);fotoUrls.value={};await Promise.all(clientes.value.filter(c=>c.tieneFoto).map(async c=>{const img=await fetch(`http://localhost:8080/api/clientes/${c.id}/foto`,{headers:headers()});if(img.ok)fotoUrls.value[c.id]=URL.createObjectURL(await img.blob())}))}catch(e){mensaje.value=e.message;error.value=true}finally{cargando.value=false}}
+async function cargar(){cargando.value=true;mensaje.value='';try{const q=new URLSearchParams({pagina:String(pagina.value),orden:ordenAsc.value?'asc':'desc',ordenar_por:ordenarPor.value,incluir_suspendidos:String(incluirSuspendidos.value)});const r=await fetch(`https://taller-mecanico-production-9449.up.railway.app/api/clientes?${q}`,{headers:headers()}),data=await r.json();if(!r.ok)throw Error(data.mensaje||'No se pudo cargar la lista.');clientes.value=data.content;paginas.value=data.totalPages;Object.values(fotoUrls.value).forEach(URL.revokeObjectURL);fotoUrls.value={};await Promise.all(clientes.value.filter(c=>c.tieneFoto).map(async c=>{const img=await fetch(`https://taller-mecanico-production-9449.up.railway.app/api/clientes/${c.id}/foto`,{headers:headers()});if(img.ok)fotoUrls.value[c.id]=URL.createObjectURL(await img.blob())}))}catch(e){mensaje.value=e.message;error.value=true}finally{cargando.value=false}}
 function abrirModalVehiculo(c){if(!puedeRegistrarVehiculo.value||c.activo!==true)return;clienteSeleccionado.value=c;vehiculoForm.value={...vehiculoVacio(),clienteId:c.id};vehiculoMensaje.value='';vehiculoError.value=false;mostrarModalVehiculo.value=true}
 function cerrarModalVehiculo(){if(guardandoVehiculo.value)return;mostrarModalVehiculo.value=false;clienteSeleccionado.value=null}
 async function registrarVehiculo(){
  if(!clienteSeleccionado.value||clienteSeleccionado.value.activo!==true)return
  guardandoVehiculo.value=true;vehiculoMensaje.value='';vehiculoError.value=false
  try{
-  const r=await fetch('http://localhost:8080/api/vehiculos',{method:'POST',headers:{...headers(),'Content-Type':'application/json'},body:JSON.stringify(vehiculoForm.value)})
+  const r=await fetch('https://taller-mecanico-production-9449.up.railway.app/api/vehiculos',{method:'POST',headers:{...headers(),'Content-Type':'application/json'},body:JSON.stringify(vehiculoForm.value)})
   const data=await r.json().catch(()=>({}))
   if(!r.ok)throw Error(data.mensaje||'No se pudo registrar el vehículo.')
   vehiculoMensaje.value=data.mensaje||'Vehículo registrado correctamente.'
@@ -146,7 +146,7 @@ async function registrarVehiculo(){
  }catch(e){vehiculoError.value=true;vehiculoMensaje.value=e.message||'No se pudo conectar con el servidor.'}
  finally{guardandoVehiculo.value=false}
 }
-async function suspender(c){if(!confirm(`¿Suspender a ${c.nombreCompleto}?`))return;try{const r=await fetch(`http://localhost:8080/api/clientes/${c.id}/suspender`,{method:'PATCH',headers:headers()}),data=await r.json();if(!r.ok)throw Error(data.mensaje||'No se pudo suspender.');await cargar()}catch(e){mensaje.value=e.message;error.value=true}}
+async function suspender(c){if(!confirm(`¿Suspender a ${c.nombreCompleto}?`))return;try{const r=await fetch(`https://taller-mecanico-production-9449.up.railway.app/api/clientes/${c.id}/suspender`,{method:'PATCH',headers:headers()}),data=await r.json();if(!r.ok)throw Error(data.mensaje||'No se pudo suspender.');await cargar()}catch(e){mensaje.value=e.message;error.value=true}}
 onMounted(async()=>{const rol=sesion().rol?.toUpperCase();esAdmin.value=rol==='ADMINISTRADOR';puedeRegistrarVehiculo.value=['ADMINISTRADOR','RECEPCIONISTA'].includes(rol);try{await cargar()}catch(e){mensaje.value=e.message;error.value=true;cargando.value=false}})
 onBeforeUnmount(()=>Object.values(fotoUrls.value).forEach(URL.revokeObjectURL))
 </script>

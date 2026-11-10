@@ -4,12 +4,12 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 const talleres = ref([]), fotos = ref({}), mensaje = ref(''), error = ref(false), cargando = ref(true)
 onMounted(async () => {
   try {
-    const response = await fetch('http://localhost:8080/api/talleres-info')
+    const response = await fetch('https://taller-mecanico-production-9449.up.railway.app/api/talleres-info')
     const data = await response.json()
     if (!response.ok) throw new Error(data.mensaje || 'No se pudo cargar la lista de talleres.')
     talleres.value = data
     await Promise.all(data.filter(t => t.tieneFoto).map(async t => {
-      const image = await fetch(`http://localhost:8080/api/talleres-info/${t.id}/foto`)
+      const image = await fetch(`https://taller-mecanico-production-9449.up.railway.app/api/talleres-info/${t.id}/foto`)
       if (image.ok) fotos.value[t.id] = URL.createObjectURL(await image.blob())
     }))
   } catch (e) { mensaje.value = e.message; error.value = true }

@@ -86,7 +86,7 @@ async function cargar() {
   cargando.value = true; mensaje.value = ''
   try {
     const q = new URLSearchParams({ pagina: String(pagina.value), orden: ordenAsc.value ? 'asc' : 'desc', ordenar_por: ordenarPor.value })
-    const r = await fetch(`http://localhost:8080/api/vehiculos?${q}`, { headers: { Authorization: `Bearer ${sesion().token || ''}` } })
+    const r = await fetch(`https://taller-mecanico-production-9449.up.railway.app/api/vehiculos?${q}`, { headers: { Authorization: `Bearer ${sesion().token || ''}` } })
     const data = await r.json()
     if (!r.ok) throw Error(data.mensaje || 'No se pudo cargar la lista de vehículos.')
     vehiculos.value = data.content; paginas.value = data.totalPages; total.value = data.totalElements

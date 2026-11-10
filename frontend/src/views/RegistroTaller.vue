@@ -17,7 +17,7 @@ watch(() => form.value.codigoPostal, (value) => {
   codigoPostalTimer = setTimeout(async () => {
     mensaje.value = 'Consultando código postal...'; error.value = false
     try {
-      const response = await fetch(`http://localhost:8080/api/codigos-postales/${encodeURIComponent(cp)}`)
+      const response = await fetch(`https://taller-mecanico-production-9449.up.railway.app/api/codigos-postales/${encodeURIComponent(cp)}`)
       const data = await response.json().catch(() => ({}))
       if (consulta !== consultaPostal) return
       if (!response.ok) throw new Error(data.mensaje || 'Código postal no encontrado.')
@@ -46,7 +46,7 @@ async function guardar() {
     const data = new FormData()
     for (const [key, value] of Object.entries(form.value)) data.append(key, key === 'rfc' ? value.trim().toUpperCase() : value)
     if (foto.value) data.append('foto', foto.value)
-    const response = await fetch('http://localhost:8080/api/talleres-info', { method: 'POST', body: data })
+    const response = await fetch('https://taller-mecanico-production-9449.up.railway.app/api/talleres-info', { method: 'POST', body: data })
     const body = await response.json()
     if (!response.ok) throw new Error(body.mensaje || 'No se pudo registrar el taller.')
     mensaje.value = body.mensaje

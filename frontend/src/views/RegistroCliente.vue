@@ -8,14 +8,14 @@ const sesionActual=()=>JSON.parse(localStorage.getItem('sesion')||'{}')
 onMounted(async()=>{
  const headers={Authorization:`Bearer ${sesionActual().token||''}`}
  try{
-  const tr=await fetch('http://localhost:8080/api/clientes/talleres',{headers}),ts=await tr.json()
+  const tr=await fetch('https://taller-mecanico-production-9449.up.railway.app/api/clientes/talleres',{headers}),ts=await tr.json()
   if(!tr.ok)throw Error(ts.mensaje||'No se pudieron cargar los talleres.')
   talleres.value=ts
  }catch(e){mensaje.value=e.message;error.value=true}
  if(!editarId)return
  const headers2={Authorization:`Bearer ${sesionActual().token||''}`}
  try{
-  const r=await fetch(`http://localhost:8080/api/clientes/${editarId}`,{headers:headers2}),c=await r.json()
+  const r=await fetch(`https://taller-mecanico-production-9449.up.railway.app/api/clientes/${editarId}`,{headers:headers2}),c=await r.json()
   if(!r.ok)throw Error(c.mensaje||'No se pudo cargar el cliente.')
   precargando=true;for(const k of Object.keys(form.value))form.value[k]=c[k]??'';precargando=false
  }catch(e){precargando=false;mensaje.value=e.message;error.value=true}
@@ -32,7 +32,7 @@ watch(()=>form.value.codigoPostal,codigo=>{if(precargando)return
  codigoPostalTimer=setTimeout(async()=>{
   mensaje.value='Consultando código postal...';error.value=false
   try{
-   const respuesta=await fetch('http://localhost:8080/api/codigos-postales/'+encodeURIComponent(cp))
+   const respuesta=await fetch('https://taller-mecanico-production-9449.up.railway.app/api/codigos-postales/'+encodeURIComponent(cp))
    const datos=await respuesta.json().catch(()=>({}))
    if(consulta!==consultaPostal)return
    if(!respuesta.ok)throw new Error(respuesta.status===404?'no encontrado':'servicio no disponible')
@@ -45,7 +45,7 @@ watch(()=>form.value.codigoPostal,codigo=>{if(precargando)return
  },350)
 })
 function onFile(e){foto.value=e.target.files?.[0]||null;if(foto.value&&foto.value.size>7*1024*1024){mensaje.value='La foto supera 7 MB.';error.value=true;foto.value=null;e.target.value=''}}
-async function guardar(){mensaje.value='';error.value=false;cargando.value=true;try{const data=new FormData();for(const [k,v] of Object.entries(form.value))data.append(k,v);if(foto.value)data.append('foto',foto.value);const sesion=sesionActual();const url=editarId?`http://localhost:8080/api/clientes/${editarId}`:'http://localhost:8080/api/clientes';const r=await fetch(url,{method:editarId?'PUT':'POST',headers:{Authorization:`Bearer ${sesion.token||''}`},body:data});const body=await r.json();if(!r.ok)throw Error(body.mensaje||'No se pudo guardar.');mensaje.value=body.mensaje||'Cliente actualizado correctamente.';if(editarId)await router.push('/clientes');else{form.value=Object.fromEntries(Object.keys(form.value).map(k=>[k,'']));foto.value=null;document.querySelector('#foto-cliente').value=''}}catch(e){mensaje.value=e.message||'Error de conexion.';error.value=true}finally{cargando.value=false}}
+async function guardar(){mensaje.value='';error.value=false;cargando.value=true;try{const data=new FormData();for(const [k,v] of Object.entries(form.value))data.append(k,v);if(foto.value)data.append('foto',foto.value);const sesion=sesionActual();const url=editarId?`https://taller-mecanico-production-9449.up.railway.app/api/clientes/${editarId}`:'https://taller-mecanico-production-9449.up.railway.app/api/clientes';const r=await fetch(url,{method:editarId?'PUT':'POST',headers:{Authorization:`Bearer ${sesion.token||''}`},body:data});const body=await r.json();if(!r.ok)throw Error(body.mensaje||'No se pudo guardar.');mensaje.value=body.mensaje||'Cliente actualizado correctamente.';if(editarId)await router.push('/clientes');else{form.value=Object.fromEntries(Object.keys(form.value).map(k=>[k,'']));foto.value=null;document.querySelector('#foto-cliente').value=''}}catch(e){mensaje.value=e.message||'Error de conexion.';error.value=true}finally{cargando.value=false}}
 const fields=[['nombreCompleto','Nombre completo','text'],['contactoAlternativo','Contacto alternativo','text'],['edad','Edad','number'],['fechaNacimiento','Fecha de nacimiento','date'],['telefonoPersonal','Telefono personal','tel'],['telefonoTrabajo','Telefono de trabajo','tel'],['emailPersonal','Email personal','email'],['emailTrabajo','Email de trabajo (opcional)','email'],['calle','Calle','text'],['colonia','Colonia','text'],['municipio','Municipio','text'],['estado','Estado','text'],['codigoPostal','Codigo postal','text'],['tallerId','Taller','number']]
 </script>
 <template>
