@@ -3,3 +3,13 @@ target/
 .env
 .vscode/
 backend/src/main/resources/application.properties
+
+# Herramientas de prueba (no son parte de la app)
+pruebas/
+targets.txt
+login_body.json
+resultados*.bin
+
+# Archivos de Codex / agentes (no son parte de la app en producción)
+spec/
+data/

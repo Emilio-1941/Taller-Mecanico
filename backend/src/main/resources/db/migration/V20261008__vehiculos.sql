@@ -1,0 +1,23 @@
+CREATE TABLE vehiculos (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  cliente_id BIGINT NOT NULL,
+  vin VARCHAR(17) NOT NULL,
+  placa VARCHAR(8) NOT NULL,
+  marca VARCHAR(60) NOT NULL,
+  modelo VARCHAR(60) NOT NULL,
+  anio INT NOT NULL,
+  version VARCHAR(80) NULL,
+  color VARCHAR(40) NOT NULL,
+  kilometraje INT UNSIGNED NOT NULL DEFAULT 0,
+  numero_serie VARCHAR(40) NOT NULL,
+  estatus_id BIGINT NOT NULL DEFAULT 1,
+  creado_en TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_vehiculos_vin (vin),
+  UNIQUE KEY uk_vehiculos_placa (placa),
+  UNIQUE KEY uk_vehiculos_numero_serie (numero_serie),
+  KEY idx_vehiculos_cliente (cliente_id),
+  KEY idx_vehiculos_estatus (estatus_id),
+  CONSTRAINT fk_vehiculos_cliente FOREIGN KEY (cliente_id) REFERENCES clientes (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT fk_vehiculos_estatus FOREIGN KEY (estatus_id) REFERENCES estatus (id) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

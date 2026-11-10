@@ -32,8 +32,9 @@ public class LoginController {
             return ResponseEntity.badRequest().body(Map.of("ok", false, "mensaje", "Datos incompletos o rol invalido."));
         }
         try {
-            var users = jdbc.query("SELECT id, nombre, rol, password_hash FROM usuarios WHERE nombre = ? OR email = ? LIMIT 1",
-                    (rs, row) -> new User(rs.getLong("id"), rs.getString("nombre"), rs.getString("rol"), rs.getString("password_hash")),
+            var users = jdbc.query("SELECT id, nombre, rol, password_hash, taller_id FROM usuarios WHERE nombre = ? OR email = ? LIMIT 1",
+                    (rs, row) -> new User(rs.getLong("id"), rs.getString("nombre"), rs.getString("rol"), rs.getString("password_hash"),
+                            rs.getObject("taller_id") != null ? rs.getLong("taller_id") : null),
                     request.usuario().trim(), request.usuario().trim());
             if (users.isEmpty()) return rejected();
             User user = users.get(0);
@@ -41,7 +42,8 @@ public class LoginController {
                 return rejected();
             }
             return ResponseEntity.ok(Map.of("ok", true, "mensaje", "Inicio de sesion exitoso.",
-                    "id", user.id(), "usuario", user.nombre(), "rol", user.rol(), "token", jwtService.issue(user.id(), user.nombre(), user.rol())));
+                    "id", user.id(), "usuario", user.nombre(), "rol", user.rol(),
+                    "token", jwtService.issue(user.id(), user.nombre(), user.rol(), user.tallerId())));
         } catch (DataAccessException e) {
             return ResponseEntity.internalServerError().body(Map.of("ok", false, "mensaje", "No se pudo consultar la base de datos."));
         }
@@ -53,6 +55,6 @@ public class LoginController {
     private static String normalize(String value) { return value.trim().toUpperCase(Locale.ROOT); }
     private static boolean blank(String value) { return value == null || value.isBlank(); }
 
-    private record User(long id, String nombre, String rol, String hash) {}
+    private record User(long id, String nombre, String rol, String hash, Long tallerId) {}
     public record LoginRequest(String usuario, String contrasena, String rol) {}
 }

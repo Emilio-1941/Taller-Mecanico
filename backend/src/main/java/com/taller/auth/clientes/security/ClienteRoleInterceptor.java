@@ -10,7 +10,14 @@ import java.util.Set;
   if("OPTIONS".equalsIgnoreCase(req.getMethod()))return true;
   String h=req.getHeader("Authorization");
   if(h==null||!h.startsWith("Bearer "))return reject(res,401,"Se requiere JWT.");
-  try{var c=jwt.verify(h.substring(7));if(!Set.of("ADMINISTRADOR","RECEPCIONISTA").contains(c.rol().toUpperCase()))return reject(res,403,"Rol sin permiso.");return true;}
+  try{
+   var c=jwt.verify(h.substring(7));String rol=c.rol().toUpperCase();
+   if("PATCH".equalsIgnoreCase(req.getMethod())&&req.getRequestURI().endsWith("/suspender")){if(!"ADMINISTRADOR".equals(rol))return reject(res,403,"Solo ADMINISTRADOR puede suspender clientes.");}
+   else if(!Set.of("ADMINISTRADOR","RECEPCIONISTA").contains(rol))return reject(res,403,"Rol sin permiso.");
+   req.setAttribute("taller_id",c.tallerId());
+   req.setAttribute("rol",rol);
+   return true;
+  }
   catch(RuntimeException e){return reject(res,401,"JWT invalido o vencido.");}
  }
  private boolean reject(HttpServletResponse r,int s,String m)throws Exception{r.setStatus(s);r.setContentType("application/json;charset=UTF-8");r.getWriter().write(new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(Map.of("mensaje",m)));return false;}
