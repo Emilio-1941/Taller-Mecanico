@@ -10,7 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.data.domain.Page;
 import java.util.*;
-@RestController @RequestMapping("/api/clientes") @CrossOrigin(origins={"http://localhost:5173","http://127.0.0.1:5173"})
+@RestController @RequestMapping("/api/clientes") @CrossOrigin(origins={"http://localhost:5173","http://127.0.0.1:5173","https://easygoing-integrity-production-8671.up.railway.app"})
 public class ClienteController {
  private final ClienteService service; public ClienteController(ClienteService s){service=s;}
  private Long tallerDelToken(HttpServletRequest req){Object v=req.getAttribute("taller_id");return v==null?null:(Long)v;}

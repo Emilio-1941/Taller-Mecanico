@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 // Solo ADMINISTRADOR y RECEPCIONISTA (lo valida ClienteRoleInterceptor). Siempre filtra por el taller del token.
-@RestController @RequestMapping("/api/vehiculos") @CrossOrigin(origins={"http://localhost:5173","http://127.0.0.1:5173"})
+@RestController @RequestMapping("/api/vehiculos") @CrossOrigin(origins={"http://localhost:5173","http://127.0.0.1:5173","https://easygoing-integrity-production-8671.up.railway.app"})
 public class VehiculoListaController {
  private final VehiculoListadoService service; public VehiculoListaController(VehiculoListadoService s){service=s;}
  @GetMapping public VehiculoListadoService.Pagina listar(@RequestParam(name="pagina",defaultValue="0") int pagina,@RequestParam(name="orden",defaultValue="asc") String orden,@RequestParam(name="ordenar_por",defaultValue="cliente") String ordenarPor,HttpServletRequest req){

@@ -14,7 +14,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/codigos-postales")
-@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
+@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173", "https://easygoing-integrity-production-8671.up.railway.app"})
 public class CodigoPostalController {
     private final JdbcTemplate jdbc;
 

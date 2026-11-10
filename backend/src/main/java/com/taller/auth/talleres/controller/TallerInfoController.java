@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/talleres-info")
-@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
+@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173", "https://easygoing-integrity-production-8671.up.railway.app"})
 public class TallerInfoController {
     private final TallerInfoService service;
     public TallerInfoController(TallerInfoService service) { this.service = service; }
